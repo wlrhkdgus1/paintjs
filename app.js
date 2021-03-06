@@ -1,5 +1,6 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d"); // context는 canvas 안에서 픽셀을 다루는것.
+const colors = document.getElementsByClassName("jsColor");
 
 canvas.width = 700;
 canvas.height = 700;
@@ -21,20 +22,18 @@ function onMouseMove(event){
     const x = event.offsetX;
     const y = event.offsetY;
     if (!painting) {
+        //console.log("creating path in", x, y);
         ctx.beginPath();
         ctx.moveTo(x,y);
     } else {
+        //console.log("creating line in", x, y);
         ctx.lineTo(x,y);
         ctx.stroke();
     }
 }
-
-function onMouseDown(event){
-    painting = true;
-}
-
-function onMouseUp(event){
-    stopPainting();
+function handleColorClick(event){
+    const color = event.target.style.backgroundColor;
+    ctx.strokeStyle = color;
 }
 
 if(canvas){
@@ -43,3 +42,6 @@ if(canvas){
     canvas.addEventListener("mouseup", stopPainting); // 캔버스안에서 클릭을 해제시
     canvas.addEventListener("mouseleave", stopPainting); // 캔버스 밖으로 나가면
 }
+
+Array.from(colors).forEach(color => 
+    color.addEventListener("click", handleColorClick));
