@@ -4,10 +4,14 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
-canvas.width = 700;
-canvas.height = 700;
+const INITIAL_COLOR = "#2c2c2c";
+const CANVAS_SIZE = 700;
 
-ctx.strokeStyle = "#2c2c2c";
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
+
+ctx.strokeStyle = INITIAL_COLOR;
+ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
 
 let painting = false;
@@ -37,6 +41,7 @@ function onMouseMove(event){
 function handleColorClick(event){
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
 }
 
 function handleRangeChange(event){
@@ -47,10 +52,16 @@ function handleRangeChange(event){
 function handleModeClick(){
     if(filling === true){
         filling = false; 
-        mode.innerText = "FILL";
+        mode.innerText = "Fill";
     } else {
         filling = true;
-        mode.innerText = "PAINT";
+        mode.innerText = "Paint";
+    }
+}
+
+function handleCanvasClick(){
+     if(filling){
+        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
     }
 }
 
@@ -59,6 +70,7 @@ if(canvas){
     canvas.addEventListener("mousedown", startPainting); // 캔버스안에서 클릭시
     canvas.addEventListener("mouseup", stopPainting); // 캔버스안에서 클릭을 해제시
     canvas.addEventListener("mouseleave", stopPainting); // 캔버스 밖으로 나가면
+    canvas.addEventListener("click", handleCanvasClick);
 }
 
 Array.from(colors).forEach(color => 
